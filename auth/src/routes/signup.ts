@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { checkSchema } from 'express-validator';
 
 import { CredentialsSchema } from '../utils/validator-schemas/credentials-schema';
@@ -10,9 +10,13 @@ router.post(
   '/api/users/signup',
   checkSchema(CredentialsSchema),
   ExpressValidator,
-  (req: Request, res: Response) => {
-    const { email, password } = req.body;
-    res.json({ email, password });
+  (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body;
+      res.json({ email, password });
+    } catch (err) {
+      next(err);
+    }
   }
 );
 

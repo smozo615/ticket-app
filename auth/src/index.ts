@@ -5,6 +5,7 @@ import { signinRouter } from './routes/signin';
 import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
 import { errorHandler } from './middlewares/error-handler';
+import { NotFoundError } from './errors/not-found-error';
 
 const PORT = 4000;
 
@@ -17,6 +18,11 @@ app.use(profileRouter);
 app.use(signinRouter);
 app.use(signupRouter);
 app.use(signoutRouter);
+
+// Not found route
+app.all('*', async (req, res, next) => {
+  next(new NotFoundError());
+});
 
 // Errors Handler
 app.use(errorHandler);

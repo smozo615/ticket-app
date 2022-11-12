@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 
 import { profileRouter } from './routes/profile';
 import { signinRouter } from './routes/signin';
@@ -27,6 +28,16 @@ app.all('*', async (req, res, next) => {
 // Errors Handler
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Running on port: ${PORT}`);
-});
+const start = async () => {
+  try {
+    await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
+  } catch (err) {
+    console.log(err);
+  }
+
+  app.listen(PORT, () => {
+    console.log(`Running on port: ${PORT}`);
+  });
+};
+
+start();

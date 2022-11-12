@@ -3,6 +3,8 @@ import { checkSchema } from 'express-validator';
 
 import { CredentialsSchema } from '../utils/validator-schemas/credentials-schema';
 import { ExpressValidator } from '../middlewares/express-validator-handler';
+import { BadRequestError } from '../errors/bad-request-error';
+import { User } from '../models/user';
 
 const router = express.Router();
 
@@ -10,10 +12,18 @@ router.post(
   '/api/users/signup',
   checkSchema(CredentialsSchema),
   ExpressValidator,
-  (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password } = req.body;
-      res.json({ email, password });
+
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        throw new BadRequestError('Email in use');
+      }
+
+      const user = User.build({ email, password });
+      await user.save();
+      res.status(201).send(user);
     } catch (err) {
       next(err);
     }

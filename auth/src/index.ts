@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cookieSession from 'cookie-session';
 
 import { profileRouter } from './routes/profile';
 import { signinRouter } from './routes/signin';
@@ -12,7 +13,18 @@ const PORT = 4000;
 
 const app = express();
 
+app.set('trust proxy', true);
+
+// Enable JSON
 app.use(express.json());
+
+// Cookies
+app.use(
+  cookieSession({
+    signed: false,
+    secure: true,
+  })
+);
 
 // Routes
 app.use(profileRouter);
@@ -29,6 +41,10 @@ app.all('*', async (req, res, next) => {
 app.use(errorHandler);
 
 const start = async () => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('jwt secret is not undefined ');
+  }
+
   try {
     await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
   } catch (err) {

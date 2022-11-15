@@ -3,7 +3,7 @@ import { checkSchema } from 'express-validator';
 import jwt from 'jsonwebtoken';
 
 import { CredentialsSchema } from '../utils/validator-schemas/credentials-schema';
-import { ExpressValidator } from '../middlewares/express-validator-handler';
+import { validateRequest } from '../middlewares/express-validator-handler';
 import { BadRequestError } from '../errors/bad-request-error';
 import { User } from '../models/user';
 
@@ -12,7 +12,7 @@ const router = express.Router();
 router.post(
   '/api/users/signup',
   checkSchema(CredentialsSchema),
-  ExpressValidator,
+  validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password } = req.body;

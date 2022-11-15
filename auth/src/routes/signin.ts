@@ -3,9 +3,7 @@ import { checkSchema } from 'express-validator';
 
 import { CredentialsSchema } from '../utils/validator-schemas/credentials-schema';
 import { validateRequest } from '../middlewares/express-validator-handler';
-import { BadRequestError } from '../errors/bad-request-error';
-import { Password } from '../utils/password';
-import { User } from '../models/user';
+import { AuthService } from '../services/auth-service';
 
 const router = express.Router();
 
@@ -17,17 +15,15 @@ router.post(
     try {
       const { email, password } = req.body;
 
-      const existingUser = await User.findOne({ email });
-      if (!existingUser) {
-        throw new BadRequestError('Invalid credentials');
-      }
+      // Verify credentials and return a JWT
+      const userJwt = await AuthService.login({ email, password });
 
-      const match = await Password.compare(existingUser.password, password);
-      if (!match) {
-        throw new BadRequestError('Invalid credentials');
-      }
+      // Store JWT on the session object
+      req.session = {
+        jwt: userJwt,
+      };
 
-      res.json(match);
+      res.send({ status: 'logged in' });
     } catch (err) {
       next(err);
     }

@@ -1,11 +1,9 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { checkSchema } from 'express-validator';
-import jwt from 'jsonwebtoken';
 
 import { CredentialsSchema } from '../utils/validator-schemas/credentials-schema';
 import { validateRequest } from '../middlewares/express-validator-handler';
-import { BadRequestError } from '../errors/bad-request-error';
-import { User } from '../models/user';
+import { AuthService } from '../services/auth-service';
 
 const router = express.Router();
 
@@ -17,27 +15,15 @@ router.post(
     try {
       const { email, password } = req.body;
 
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        throw new BadRequestError('Email in use');
-      }
+      // Store user in DB and return a JWT
+      const userJwt = await AuthService.register({ email, password });
 
-      const user = User.build({ email, password });
-      await user.save();
-
-      // Generate JWT
-      const payload = {
-        id: user.id,
-        email: user.email,
-      };
-      const userJwt = jwt.sign(payload, process.env.JWT_SECRET!);
-
-      // Store it on the session object
+      // Store JWT on the session object
       req.session = {
         jwt: userJwt,
       };
 
-      res.status(201).send(user);
+      res.status(201).send({ status: 'Signed up' });
     } catch (err) {
       next(err);
     }

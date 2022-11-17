@@ -10,12 +10,15 @@ const signup = () => {
     url: '/api/users/signup',
     body: { email, password },
     method: 'post',
+    onSuccess: () => {
+      return Router.push('/');
+    },
   });
 
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    doRequest();
+    await doRequest();
   };
 
   return (

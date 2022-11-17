@@ -8,10 +8,10 @@ export const CredentialsSchema: Schema = {
   email: {
     in: 'body',
     notEmpty: {
-      errorMessage: 'It must not be empty',
+      errorMessage: 'Email must not be empty',
     },
     isEmail: {
-      errorMessage: 'It must be a valid email',
+      errorMessage: 'Email must be a valid',
     },
     trim: true,
   },
@@ -26,7 +26,7 @@ export const CredentialsSchema: Schema = {
       options: /\d/,
     },
     notEmpty: {
-      errorMessage: 'It must not be empty',
+      errorMessage: 'Password must not be empty',
     },
   },
 };

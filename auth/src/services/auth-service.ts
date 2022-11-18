@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
+import { BadRequestError } from '@sm-ticket-app/common';
 
-import { BadRequestError } from '../errors/bad-request-error';
 import { Password } from '../utils/password';
 import { User } from '../models/user';
 

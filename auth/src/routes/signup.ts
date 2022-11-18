@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
+import { validateRequest } from '@sm-ticket-app/common';
 import { checkSchema } from 'express-validator';
 
 import { CredentialsSchema } from '../utils/validator-schemas/credentials-schema';
-import { validateRequest } from '../middlewares/express-validator-handler';
 import { AuthService } from '../services/auth-service';
 
 const router = express.Router();

@@ -1,6 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
-
-import { currentUser } from '../middlewares/current-user';
+import { currentUser } from '@sm-ticket-app/common';
 
 const router = express.Router();
 

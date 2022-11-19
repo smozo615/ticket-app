@@ -1,6 +1,7 @@
 import express from 'express';
 import cookieSession from 'cookie-session';
 import { errorHandler, NotFoundError } from '@sm-ticket-app/common';
+import { createTicketRouter } from './routes/new';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(
 );
 
 // Routes
+app.use(createTicketRouter);
 
 // Not found route
 app.all('*', async (req, res, next) => {

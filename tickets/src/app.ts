@@ -1,6 +1,10 @@
 import express from 'express';
 import cookieSession from 'cookie-session';
-import { errorHandler, NotFoundError } from '@sm-ticket-app/common';
+import {
+  errorHandler,
+  NotFoundError,
+  currentUser,
+} from '@sm-ticket-app/common';
 import { createTicketRouter } from './routes/new';
 
 const app = express();
@@ -17,6 +21,9 @@ app.use(
     secure: process.env.NODE_ENV !== 'test',
   })
 );
+
+// Returns req.currentUser if user is authenticated
+app.use(currentUser);
 
 // Routes
 app.use(createTicketRouter);

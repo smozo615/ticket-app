@@ -9,8 +9,12 @@ const start = async () => {
     throw new Error('jwt secret is not undefined ');
   }
 
+  if (!process.env.MONGO_URI) {
+    throw new Error('Mongo Uri must be defined');
+  }
+
   try {
-    await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
+    await mongoose.connect(process.env.MONGO_URI);
   } catch (err) {
     console.log(err);
   }

@@ -16,6 +16,8 @@ spec:
         - name: auth
           image: smozo615/auth-ticket-app
           env:
+            - name: MONGO_URI
+              value: 'mongodb://auth-mongo-srv:27017/auth'
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:

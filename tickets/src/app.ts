@@ -5,7 +5,9 @@ import {
   NotFoundError,
   currentUser,
 } from '@sm-ticket-app/common';
+
 import { createTicketRouter } from './routes/new';
+import { getTicketRouter } from './routes/ticket';
 
 const app = express();
 
@@ -27,10 +29,11 @@ app.use(currentUser);
 
 // Routes
 app.use(createTicketRouter);
+app.use(getTicketRouter);
 
 // Not found route
 app.all('*', async (req, res, next) => {
-  next(new NotFoundError());
+  next(new NotFoundError('Route not found'));
 });
 
 // Errors Handler

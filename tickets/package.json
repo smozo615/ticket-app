@@ -23,7 +23,7 @@
   "author": "santiago mozo <smozo615@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@sm-ticket-app/common": "1.0.3",
+    "@sm-ticket-app/common": "1.0.4",
     "@types/cookie-session": "2.0.44",
     "@types/express": "4.17.14",
     "@types/jsonwebtoken": "8.5.9",

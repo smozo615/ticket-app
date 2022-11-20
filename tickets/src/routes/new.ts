@@ -3,6 +3,7 @@ import { requireAuth, validateRequest } from '@sm-ticket-app/common';
 import { checkSchema } from 'express-validator';
 
 import { CreateTicketSchema } from '../utils/validator-schemas/create-ticket-schema';
+import { Ticket } from '../models/ticket';
 
 const router = express.Router();
 
@@ -11,8 +12,13 @@ router.post(
   requireAuth,
   checkSchema(CreateTicketSchema),
   validateRequest,
-  (req: Request, res: Response, next: NextFunction) => {
-    res.status(201).send({ status: 'Created' });
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { title, price } = req.body;
+
+    const ticket = Ticket.build({ title, price, userId: req.currentUser!.id });
+    await ticket.save();
+
+    return res.status(201).send(ticket);
   }
 );
 

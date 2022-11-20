@@ -24,4 +24,4 @@ router.get(
   }
 );
 
-export { router as getTicketRouter };
+export { router as ticketByIdRouter };

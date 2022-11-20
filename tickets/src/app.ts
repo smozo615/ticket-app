@@ -7,7 +7,8 @@ import {
 } from '@sm-ticket-app/common';
 
 import { createTicketRouter } from './routes/new';
-import { getTicketRouter } from './routes/ticket';
+import { ticketByIdRouter } from './routes/ticketById';
+import { TicketsRouter } from './routes/tickets';
 
 const app = express();
 
@@ -29,7 +30,8 @@ app.use(currentUser);
 
 // Routes
 app.use(createTicketRouter);
-app.use(getTicketRouter);
+app.use(ticketByIdRouter);
+app.use(TicketsRouter);
 
 // Not found route
 app.all('*', async (req, res, next) => {

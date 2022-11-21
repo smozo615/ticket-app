@@ -9,6 +9,7 @@ import {
 import { createTicketRouter } from './routes/new';
 import { ticketByIdRouter } from './routes/ticketById';
 import { TicketsRouter } from './routes/tickets';
+import { updateTicketRouter } from './routes/update';
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use(currentUser);
 app.use(createTicketRouter);
 app.use(ticketByIdRouter);
 app.use(TicketsRouter);
+app.use(updateTicketRouter);
 
 // Not found route
 app.all('*', async (req, res, next) => {

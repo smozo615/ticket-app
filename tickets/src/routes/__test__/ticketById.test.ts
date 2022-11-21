@@ -14,7 +14,7 @@ it('returns a 404 if ticket is not found', async () => {
 });
 
 it('returns the ticket if ticket was found', async () => {
-  const cookie = await global.signup();
+  const cookie = await global.cookie();
   const title = 'Imagine Dragons';
   const price = 50;
 

@@ -8,7 +8,7 @@ export const MongoIdSchema: Schema = {
   id: {
     in: 'params',
     notEmpty: {
-      errorMessage: 'id must not be provided',
+      errorMessage: 'id must be provided',
     },
     isMongoId: {
       errorMessage: 'id must be a valid mongoId',

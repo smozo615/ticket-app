@@ -1,9 +1,8 @@
 import request from 'supertest';
 import { app } from '../../app';
-import { Ticket } from '../../models/ticket';
 
 const createTicket = async () => {
-  const cookie = await global.signup();
+  const cookie = await global.cookie();
   const title = 'Imagine Dragons';
   const price = 50;
 

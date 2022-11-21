@@ -13,7 +13,7 @@ it('can only be accessed if the user is signed in', async () => {
 });
 
 it('returns a status other than 401 if user is authenticated', async () => {
-  const cookie = await global.signup();
+  const cookie = await global.cookie();
 
   const response = await request(app)
     .post('/api/tickets')
@@ -24,7 +24,7 @@ it('returns a status other than 401 if user is authenticated', async () => {
 });
 
 it('returns an error if an invalid TITLE is provided', async () => {
-  const cookie = await global.signup();
+  const cookie = await global.cookie();
 
   await request(app)
     .post('/api/tickets')
@@ -40,7 +40,7 @@ it('returns an error if an invalid TITLE is provided', async () => {
 });
 
 it('returns an error if an invalid PRICE is provided', async () => {
-  const cookie = await global.signup();
+  const cookie = await global.cookie();
 
   await request(app)
     .post('/api/tickets')
@@ -59,7 +59,7 @@ it('creates a ticket with valid inputs', async () => {
   let tickets = await Ticket.find({});
   expect(tickets.length).toEqual(0);
 
-  const cookie = await global.signup();
+  const cookie = await global.cookie();
   const title = 'Imagine Dragons';
   const price = 50;
 

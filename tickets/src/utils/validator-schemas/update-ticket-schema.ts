@@ -19,6 +19,7 @@ export const updateTicketSchema: Schema = {
     isString: {
       errorMessage: 'Title must be a string',
     },
+    optional: true,
   },
   price: {
     in: 'body',
@@ -26,5 +27,6 @@ export const updateTicketSchema: Schema = {
       errorMessage: 'Price should be a number greater than 0',
       options: { min: 0 },
     },
+    optional: true,
   },
 };

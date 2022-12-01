@@ -9,6 +9,8 @@ import { checkSchema } from 'express-validator';
 
 import { Ticket } from '../models/ticket';
 import { updateTicketSchema } from '../utils/validator-schemas/update-ticket-schema';
+import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
+import { natsWrapper } from '../nats';
 
 const router = express.Router();
 
@@ -31,6 +33,13 @@ router.put(
 
       ticket.set({ ...req.body });
       await ticket.save();
+
+      new TicketUpdatedPublisher(natsWrapper.client).publish({
+        id: ticket.id,
+        price: ticket.price,
+        title: ticket.title,
+        userId: ticket.userId,
+      });
 
       res.send(ticket);
     } catch (err) {

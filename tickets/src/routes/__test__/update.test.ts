@@ -3,6 +3,9 @@ import mongoose from 'mongoose';
 
 import { app } from '../../app';
 
+// To ensure mock invocations (nats events)
+import { natsWrapper } from '../../nats';
+
 it('Returns a 400 if request is not valid', async () => {
   const cookie = await global.cookie();
 
@@ -116,4 +119,28 @@ it('Returns a 200 if ticket was updated', async () => {
   expect(response.statusCode).toEqual(200);
   expect(response.body.title).toEqual('title updated');
   expect(response.body.price).toEqual(50);
+});
+
+it('publishes a updated ticket event', async () => {
+  const cookie = await global.cookie();
+
+  const ticket = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+      title: 'title',
+      price: 20,
+    })
+    .expect(201);
+
+  await request(app)
+    .put(`/api/tickets/${ticket.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'title updated',
+      price: 50,
+    })
+    .expect(200);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

@@ -7,15 +7,32 @@ const PORT = 4001;
 
 const start = async () => {
   if (!process.env.JWT_SECRET) {
-    throw new Error('jwt secret must be defined');
+    throw new Error('JWT_SECRET must be defined');
   }
 
   if (!process.env.MONGO_URI) {
-    throw new Error('Mongo Uri must be defined');
+    throw new Error('MONGO_URI must be defined');
+  }
+
+  if (!process.env.NATS_URL) {
+    throw new Error('NATS_URL must be defined');
+  }
+
+  if (!process.env.NATS_CLIENT_ID) {
+    throw new Error('NATS_CLIENT_ID must be defined');
+  }
+
+  if (!process.env.NATS_CLUSTER_ID) {
+    throw new Error('NATS_CLUSTER_ID must be defined');
   }
 
   try {
-    await natsWrapper.connect('ticket-app', 'asdf', 'http://nats-srv:4222');
+    await natsWrapper.connect(
+      process.env.NATS_CLUSTER_ID,
+      process.env.NATS_CLIENT_ID,
+      process.env.NATS_URL
+    );
+
     natsWrapper.client.on('close', () => {
       console.log('NATS connection close');
       process.exit();

@@ -6,6 +6,8 @@ declare global {
   var cookie: () => Promise<string[]>;
 }
 
+jest.mock('../nats');
+
 let mongo: any;
 
 beforeAll(async () => {

@@ -15,19 +15,27 @@ router.post(
   checkSchema(CreateTicketSchema),
   validateRequest,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { title, price } = req.body;
+    try {
+      const { title, price } = req.body;
 
-    const ticket = Ticket.build({ title, price, userId: req.currentUser!.id });
-    await ticket.save();
+      const ticket = Ticket.build({
+        title,
+        price,
+        userId: req.currentUser!.id,
+      });
+      await ticket.save();
 
-    new TicketCreatedPublisher(natsWrapper.client).publish({
-      id: ticket.id,
-      title: ticket.title,
-      price: ticket.price,
-      userId: ticket.userId,
-    });
+      new TicketCreatedPublisher(natsWrapper.client).publish({
+        id: ticket.id,
+        title: ticket.title,
+        price: ticket.price,
+        userId: ticket.userId,
+      });
 
-    return res.status(201).send(ticket);
+      return res.status(201).send(ticket);
+    } catch (err) {
+      next(err);
+    }
   }
 );
 

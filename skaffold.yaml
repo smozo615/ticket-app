@@ -24,6 +24,14 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: smozo615/orders-ticket-app
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
     - image: smozo615/client-ticket-app
       context: client
       docker:

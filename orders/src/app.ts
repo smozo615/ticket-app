@@ -6,10 +6,10 @@ import {
   currentUser,
 } from '@sm-ticket-app/common';
 
-import { createTicketRouter } from './routes/new';
-import { ticketByIdRouter } from './routes/ticketById';
-import { TicketsRouter } from './routes/tickets';
-import { updateTicketRouter } from './routes/update';
+import { createOrderRouter } from './routes/new';
+import { orderByIdRouter } from './routes/order-by-id';
+import { ordersRouter } from './routes/orders';
+import { deleteOrderRouter } from './routes/delete';
 
 const app = express();
 
@@ -30,10 +30,10 @@ app.use(
 app.use(currentUser);
 
 // Routes
-app.use(createTicketRouter);
-app.use(ticketByIdRouter);
-app.use(TicketsRouter);
-app.use(updateTicketRouter);
+app.use(createOrderRouter);
+app.use(orderByIdRouter);
+app.use(ordersRouter);
+app.use(deleteOrderRouter);
 
 // Not found route
 app.all('*', async (req, res, next) => {

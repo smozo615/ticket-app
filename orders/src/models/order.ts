@@ -1,19 +1,20 @@
 import mongoose from 'mongoose';
 import { OrderStatus } from '@sm-ticket-app/common';
+export { OrderStatus };
 
 import { TicketDoc } from './ticket';
 
 interface OrderAttrs {
   userId: string;
   status: OrderStatus;
-  expiresAt: string;
+  expiresAt: Date;
   ticket: TicketDoc;
 }
 
 interface OrderDoc extends mongoose.Document {
   userId: string;
   status: OrderStatus;
-  expiresAt: string;
+  expiresAt: Date;
   ticket: TicketDoc;
 }
 

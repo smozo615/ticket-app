@@ -12,6 +12,10 @@ import { CreateOrderSchema } from '../utils/validator-schemas/create-order-schem
 import { Ticket } from '../models/ticket';
 import { Order } from '../models/order';
 
+// Event Bus
+import { natsWrapper } from '../nats';
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
+
 const router = express.Router();
 
 // The time in seconds that the order is valid
@@ -55,6 +59,16 @@ router.post(
       await order.save();
 
       // Emit event: order:created
+      new OrderCreatedPublisher(natsWrapper.client).publish({
+        id: order.id,
+        status: OrderStatus.Created,
+        expiresAt: order.expiresAt.toISOString(),
+        userId: order.userId,
+        ticket: {
+          id: ticket.id,
+          price: ticket.price,
+        },
+      });
 
       res.status(201).send(order);
     } catch (err) {

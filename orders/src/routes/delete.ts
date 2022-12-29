@@ -7,6 +7,10 @@ import express, { Request, Response, NextFunction } from 'express';
 
 import { Order, OrderStatus } from '../models/order';
 
+// Event Bus
+import { natsWrapper } from '../nats';
+import { OrderCancelledPublisher } from '../events/publishers/order-cancelled-publisher';
+
 const router = express.Router();
 
 router.delete(
@@ -28,6 +32,14 @@ router.delete(
 
       order.status = OrderStatus.Cancelled;
       await order.save();
+
+      // Emit event: order:cancelled
+      new OrderCancelledPublisher(natsWrapper.client).publish({
+        id: order.id,
+        ticket: {
+          id: order.ticket.id,
+        },
+      });
 
       res.send(order);
     } catch (err) {

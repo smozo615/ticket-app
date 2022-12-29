@@ -90,4 +90,20 @@ it('reserves a ticket', async () => {
     .expect(201);
 });
 
-it.todo('emits an order created event');
+it('emits an order created event', async () => {
+  const cookie = await global.cookie();
+
+  const ticket = Ticket.build({
+    title: 'Imagine Dragons',
+    price: 100,
+  });
+  await ticket.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', cookie)
+    .send({ ticketId: ticket.id })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toBeCalled();
+});

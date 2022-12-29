@@ -85,4 +85,29 @@ it('marks an order as cancelled', async () => {
   expect(updatedOrder.status).toEqual(OrderStatus.Cancelled);
 });
 
-it.todo('emits an order cancelled event');
+it('emits an order cancelled event', async () => {
+  // Create a ticket
+  const ticket = Ticket.build({
+    title: 'Imagine Dragons',
+    price: 100,
+  });
+  await ticket.save();
+
+  // Make a request to build an order
+  const cookie = await global.cookie();
+
+  const { body: order } = await request(app)
+    .post('/api/orders')
+    .set('Cookie', cookie)
+    .send({ ticketId: ticket.id })
+    .expect(201);
+
+  // Make a request to cancel the order
+  await request(app)
+    .delete(`/api/orders/${order.id}`)
+    .set('Cookie', cookie)
+    .expect(200);
+
+  // expectation to make a publish event
+  expect(natsWrapper.client.publish).toBeCalled();
+});

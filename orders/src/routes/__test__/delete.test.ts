@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
-import { Order, OrderStatus } from '../../models/order';
+import { OrderStatus } from '../../models/order';
 
 // To ensure mock invocations (nats events)
 import { natsWrapper } from '../../nats';
@@ -30,6 +30,7 @@ it('returns a 403 if the user is not the owner of the order', async () => {
   const ticket = Ticket.build({
     title: 'Imagine Dragons',
     price: 100,
+    id: new mongoose.Types.ObjectId().toHexString(),
   });
   await ticket.save();
 
@@ -57,6 +58,7 @@ it('marks an order as cancelled', async () => {
   const ticket = Ticket.build({
     title: 'Imagine Dragons',
     price: 100,
+    id: new mongoose.Types.ObjectId().toHexString(),
   });
   await ticket.save();
 
@@ -90,6 +92,7 @@ it('emits an order cancelled event', async () => {
   const ticket = Ticket.build({
     title: 'Imagine Dragons',
     price: 100,
+    id: new mongoose.Types.ObjectId().toHexString(),
   });
   await ticket.save();
 

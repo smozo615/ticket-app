@@ -1,15 +1,14 @@
 import request from 'supertest';
+import mongoose from 'mongoose';
 
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
-
-// To ensure mock invocations (nats events)
-import { natsWrapper } from '../../nats';
 
 const buildTicket = async () => {
   const ticket = Ticket.build({
     title: 'concert',
     price: 100,
+    id: new mongoose.Types.ObjectId().toHexString(),
   });
   await ticket.save();
 

@@ -29,6 +29,7 @@ it('returns a 403 if the user is not the owner of the order', async () => {
   const ticket = Ticket.build({
     title: 'Imagine Dragons',
     price: 100,
+    id: new mongoose.Types.ObjectId().toHexString(),
   });
   await ticket.save();
 
@@ -56,6 +57,7 @@ it('fetches the order', async () => {
   const ticket = Ticket.build({
     title: 'Imagine Dragons',
     price: 100,
+    id: new mongoose.Types.ObjectId().toHexString(),
   });
   await ticket.save();
 

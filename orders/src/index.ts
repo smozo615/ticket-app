@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 
 import { app } from './app';
 import { natsWrapper } from './nats';
+import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
+import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener';
 
 const PORT = 4000;
 
@@ -27,6 +29,7 @@ const start = async () => {
   }
 
   try {
+    // Connection to event-bus
     await natsWrapper.connect(
       process.env.NATS_CLUSTER_ID,
       process.env.NATS_CLIENT_ID,
@@ -41,6 +44,11 @@ const start = async () => {
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
 
+    // Event listeners
+    new TicketCreatedListener(natsWrapper.client).listen();
+    new TicketUpdatedListener(natsWrapper.client).listen();
+
+    // Connection to DB
     await mongoose.connect(process.env.MONGO_URI);
   } catch (err) {
     console.log(err);

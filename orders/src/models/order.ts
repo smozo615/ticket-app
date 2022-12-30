@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { OrderStatus } from '@sm-ticket-app/common';
 export { OrderStatus };
 
@@ -52,6 +53,9 @@ const ordersSchema = new mongoose.Schema(
     },
   }
 );
+
+ordersSchema.set('versionKey', 'version');
+ordersSchema.plugin(updateIfCurrentPlugin);
 
 ordersSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs);

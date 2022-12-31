@@ -4,6 +4,7 @@ import {
   requireAuth,
   validateRequest,
   ForbiddenError,
+  BadRequestError,
 } from '@sm-ticket-app/common';
 import { checkSchema } from 'express-validator';
 
@@ -29,6 +30,10 @@ router.put(
 
       if (ticket.userId !== req.currentUser!.id) {
         throw new ForbiddenError('Forbidden');
+      }
+
+      if (ticket.orderId) {
+        throw new BadRequestError('Cannot edit a reserved ticket');
       }
 
       ticket.set({ ...req.body });

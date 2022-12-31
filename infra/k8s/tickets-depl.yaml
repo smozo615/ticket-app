@@ -43,5 +43,5 @@ spec:
   ports:
     - name: tickets
       protocol: TCP
-      port: 4001
-      targetPort: 4001
+      port: 4000
+      targetPort: 4000

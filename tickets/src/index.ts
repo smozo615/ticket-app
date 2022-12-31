@@ -5,7 +5,7 @@ import { natsWrapper } from './nats';
 import { OrderCreatedListener } from './events/listeners/order-created-listener';
 import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
 
-const PORT = 4001;
+const PORT = 4000;
 
 const start = async () => {
   if (!process.env.JWT_SECRET) {

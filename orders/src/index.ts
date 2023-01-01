@@ -4,6 +4,7 @@ import { app } from './app';
 import { natsWrapper } from './nats';
 import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
 import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener';
+import { ExpirationCompleteListener } from './events/listeners/expiration-complete-listener';
 
 const PORT = 4000;
 
@@ -47,6 +48,7 @@ const start = async () => {
     // Event listeners
     new TicketCreatedListener(natsWrapper.client).listen();
     new TicketUpdatedListener(natsWrapper.client).listen();
+    new ExpirationCompleteListener(natsWrapper.client).listen();
 
     // Connection to DB
     await mongoose.connect(process.env.MONGO_URI);

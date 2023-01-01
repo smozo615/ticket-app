@@ -23,7 +23,7 @@
   "author": "santiago mozo <smozo615@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@sm-ticket-app/common": "1.0.10",
+    "@sm-ticket-app/common": "1.0.11",
     "bull": "4.10.2",
     "node-nats-streaming": "0.3.2",
     "ts-node-dev": "2.0.0",

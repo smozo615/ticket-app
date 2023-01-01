@@ -23,7 +23,7 @@ spec:
               service:
                 name: tickets-srv
                 port:
-                  number: 4001
+                  number: 4000
           - path: /api/orders/?(.*)
             pathType: Prefix
             backend:

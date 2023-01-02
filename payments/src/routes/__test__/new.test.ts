@@ -2,7 +2,10 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 
 import { app } from '../../app';
+import { stripe } from '../../stripe';
 import { Order, OrderStatus } from '../../models/orders';
+
+jest.mock('../../stripe.ts');
 
 it('returns 404 if order does not exist', async () => {
   const cookie = await global.cookie();
@@ -76,4 +79,34 @@ it('returns 400 when purchasing a cancelled order', async () => {
       token: 'token',
     })
     .expect(400);
+});
+
+it('returns 201 with valid inputs', async () => {
+  const userId = new mongoose.Types.ObjectId().toHexString();
+
+  const cookie = await global.cookie(userId);
+
+  const order = Order.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
+    price: 100,
+    status: OrderStatus.Created,
+    userId,
+    version: 0,
+  });
+  await order.save();
+
+  await request(app)
+    .post('/api/payments')
+    .set('Cookie', cookie)
+    .send({
+      orderId: order.id,
+      token: 'tok_visa',
+    })
+    .expect(201);
+
+  const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0];
+
+  expect(chargeOptions.source).toEqual('tok_visa');
+  expect(chargeOptions.amount).toEqual(order.price * 100);
+  expect(chargeOptions.currency).toEqual('usd');
 });

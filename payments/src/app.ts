@@ -6,6 +6,8 @@ import {
   currentUser,
 } from '@sm-ticket-app/common';
 
+import { CreateChargeRouter } from './routes/new';
+
 const app = express();
 
 app.set('trust proxy', true);
@@ -25,6 +27,7 @@ app.use(
 app.use(currentUser);
 
 // Routes
+app.use(CreateChargeRouter);
 
 // Not found route
 app.all('*', async (req, res, next) => {

@@ -8,6 +8,7 @@ import {
 import express, { Request, Response, NextFunction } from 'express';
 import { checkSchema } from 'express-validator';
 
+import { stripe } from '../stripe';
 import { Order, OrderStatus } from '../models/orders';
 import { CreateChargeSchema } from '../utils/validator-schemas/create-order-schema';
 
@@ -34,6 +35,12 @@ router.post(
       if (order.status === OrderStatus.Cancelled) {
         throw new BadRequestError('Cannot pay for a cancelled order');
       }
+
+      await stripe.charges.create({
+        currency: 'usd',
+        amount: order.price * 100,
+        source: token,
+      });
 
       res.send({ success: true });
     } catch (err) {

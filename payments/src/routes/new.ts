@@ -12,6 +12,8 @@ import { stripe } from '../stripe';
 import { Payment } from '../models/payment';
 import { Order, OrderStatus } from '../models/orders';
 import { CreateChargeSchema } from '../utils/validator-schemas/create-order-schema';
+import { PaymentCreatedPublisher } from '../events/publishers/payment-created-publisher';
+import { natsWrapper } from '../nats';
 
 const router = express.Router();
 
@@ -49,7 +51,13 @@ router.post(
       });
       await payment.save();
 
-      res.status(201).send({ success: true });
+      new PaymentCreatedPublisher(natsWrapper.client).publish({
+        id: payment.id,
+        orderId: payment.orderId,
+        stripeId: payment.stripeId,
+      });
+
+      res.status(201).send({ id: payment.id });
     } catch (err) {
       next(err);
     }

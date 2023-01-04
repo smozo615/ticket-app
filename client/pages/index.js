@@ -6,7 +6,7 @@ const HomePage = ({ currentUser }) => {
   );
 };
 
-HomePage.getInitialProps = async (context) => {
+HomePage.getInitialProps = async (context, client, currentUser) => {
   return {};
 };
 

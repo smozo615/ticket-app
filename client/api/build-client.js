@@ -5,7 +5,7 @@ const buildClient = ({ req }) => {
     // We are on the server
 
     return axios.create({
-      baseURL: 'http://www.sm-ticketsapp.store/',
+      baseURL: 'http://www.sm-ticketsapp.store',
       headers: req.headers,
     });
   } else {

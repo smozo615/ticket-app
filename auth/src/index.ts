@@ -5,7 +5,7 @@ import { app } from './app';
 const PORT = 4000;
 
 const start = async () => {
-  console.log('Starting...');
+  console.log('Starting....');
 
   if (!process.env.JWT_SECRET) {
     throw new Error('jwt secret is not undefined ');

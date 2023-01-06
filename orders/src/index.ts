@@ -10,6 +10,8 @@ import { PaymentCreatedListener } from './events/listeners/payment-created-liste
 const PORT = 4000;
 
 const start = async () => {
+  console.log('Starting....');
+
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET must be defined');
   }
